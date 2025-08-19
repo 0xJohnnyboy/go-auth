@@ -6,8 +6,12 @@ import (
 	. "goauth/internal/auth"
 )
 
+func HealthCheckHandler(c *gin.Context) {
+	c.String(200, "Running")
+}
+
 func TestHandler(c *gin.Context) {
-	c.String(200, "Hello, world!")
+	c.String(200, "Test")
 }
 
 type UserRegisterInput struct {

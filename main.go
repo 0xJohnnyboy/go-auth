@@ -1,7 +1,15 @@
 package main
 
-import "goauth/internal/api"
+import (
+	"github.com/joho/godotenv"
+	"goauth/internal/api"
+)
 
 func main() {
+	err := godotenv.Load()
+	if err != nil {
+		panic(err)
+	}
+
 	api.Serve()
 }
