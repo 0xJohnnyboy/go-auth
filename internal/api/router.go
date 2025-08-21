@@ -22,6 +22,7 @@ func (r *Router) RegisterRoutes(router *gin.Engine) {
 		unprotected := router.Group("/")
 		unprotected.POST("/register", r.h.RegisterHandler)
 		unprotected.POST("/login", r.h.LoginHandler)
+		unprotected.POST("/refresh_token", r.h.RefreshTokenHandler)
 	}
 
 	{

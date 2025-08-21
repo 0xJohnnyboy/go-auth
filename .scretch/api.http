@@ -1,36 +1,64 @@
 ### register
-# @prompt username 
-# @secret password 
+
+# @prompt username
+# @secret password
+
 POST {{API_URL}}/register HTTP/1.1
 Accept: application/json
 Content-Type: application/json
 
 {
-  "username": "{{username}}",
-  "password": "{{password}}"
+  "password": "{{password}}",
+  "username": "{{username}}"
 }
+
 
 ### login
+
 POST {{API_URL}}/login HTTP/1.1
-accept: application/json
-content-type: application/json
+Accept: application/json
+Content-Type: application/json
 
 {
-  "username": "{{username}}",
-  "password": "{{password}}"
+  "password": "{{password}}",
+  "username": "{{username}}"
 }
 
+# > {%
+#     console.log(
+#     response.headers.valuesOf('Set-Cookie')
+#     );
+# %}
+
+
+### refresh_token
+
+POST {{API_URL}}/refresh_token HTTP/1.1
+Cookie: token={{login.response.cookies.token.value}}; refresh_token={{login.response.cookies.refresh_token.value}}
+Accept: application/json
+Content-Type: application/json
+
+
 ### test
+
 GET {{API_URL}}/api/test HTTP/1.1
+Cookie: token={{login.response.cookies.token.value}}; refresh_token={{login.response.cookies.refresh_token.value}}
 Cookie: {{login.response.headers.Set-Cookie}}
-accept: application/json
+Accept: application/json
+
 
 ### logout
+
 POST {{API_URL}}/api/logout HTTP/1.1
-Cookie: {{login.response.headers.Set-Cookie}}
-accept: application/json
-content-type: application/json
+Cookie: token={{login.response.cookies.token.value}}; refresh_token={{login.response.cookies.refresh_token.value}}
+Accept: application/json
+Content-Type: application/json
+
 
 ### hc
+
+
+### 
+
 GET {{API_URL}}/hc HTTP/1.1
-accept: application/json
+Accept: application/json
