@@ -2,13 +2,20 @@ package auth
 
 import (
 	"errors"
-	// "fmt"
 
 	. "goauth/internal/models"
-	d "goauth/internal/storage"
+	"gorm.io/gorm"
 )
 
-func Register(username, password string) (*User, error) {
+type AuthService struct {
+	db *gorm.DB
+}
+
+func NewAuthService(db *gorm.DB) *AuthService {
+	return &AuthService{db: db}
+}
+
+func (s *AuthService) Register(username, password string) (*User, error) {
 	if username == "" {
 		return nil, errors.New("username cannot be empty")
 	}
@@ -27,25 +34,13 @@ func Register(username, password string) (*User, error) {
 		Password: hashedPassword,
 	}
 
-	db, err := d.Connect()
-
-	if err != nil {
-		return nil, err
-	}
-
-	return &user, db.Create(&user).Error
+	return &user, s.db.Create(&user).Error
 }
 
-func Login(username, password string) (*User, error) {
-	db, err := d.Connect()
-
-	if err != nil {
-		return nil, err
-	}
-
+func (s *AuthService) Login(username, password string) (*User, error) {
 	var user User
 
-	err = db.Where("username = ?", username).First(&user).Error
+	err := s.db.Where("username = ?", username).First(&user).Error
 
 	if err != nil {
 		return nil, err
@@ -57,8 +52,4 @@ func Login(username, password string) (*User, error) {
 	}
 
 	return &user, nil
-}
-
-func Logout() error {
-	return errors.New("not implemented")
 }

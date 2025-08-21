@@ -4,13 +4,24 @@ import (
 	"github.com/gin-gonic/gin"
 
 	. "goauth/internal/auth"
+	"gorm.io/gorm"
 )
 
-func HealthCheckHandler(c *gin.Context) {
+type Handlers struct {
+	authService *AuthService
+}
+
+func NewHandlers(db *gorm.DB) *Handlers {
+	return &Handlers{
+		authService: NewAuthService(db),
+	}
+}
+
+func (h *Handlers) HealthCheckHandler(c *gin.Context) {
 	c.String(200, "Running")
 }
 
-func TestHandler(c *gin.Context) {
+func (h *Handlers) TestHandler(c *gin.Context) {
 	c.String(200, "Test")
 }
 
@@ -19,13 +30,13 @@ type UserRegisterInput struct {
 	Password string `json:"password"`
 }
 
-func RegisterHandler(c *gin.Context) {
+func (h *Handlers) RegisterHandler(c *gin.Context) {
 	var input UserRegisterInput
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
-	user, err := Register(input.Username, input.Password)
+	user, err := h.authService.Register(input.Username, input.Password)
 	if err != nil {
 		c.JSON(400, gin.H{"error": err.Error()})
 		return
@@ -61,13 +72,13 @@ type UserLoginInput struct {
 	Password string `json:"password"`
 }
 
-func LoginHandler(c *gin.Context) {
+func (h *Handlers) LoginHandler(c *gin.Context) {
 	var input UserLoginInput
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
-	user, err := Login(input.Username, input.Password)
+	user, err := h.authService.Login(input.Username, input.Password)
 	if err != nil {
 		c.JSON(400, gin.H{"error": err.Error()})
 		return
@@ -98,7 +109,7 @@ func LoginHandler(c *gin.Context) {
 	})
 }
 
-func LogoutHandler(c *gin.Context) {
+func (h *Handlers) LogoutHandler(c *gin.Context) {
 	c.GetString("username")
 	c.SetCookie("token", "", -1, "/", "", true, true)
 	c.JSON(200, gin.H{"message": "Logged out"})
