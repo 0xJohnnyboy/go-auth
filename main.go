@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/joho/godotenv"
-	"goauth/internal/api"
+	"goauth/cmd"
 )
 
 func main() {
@@ -10,6 +10,5 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-
-	api.Serve()
+	cmd.Execute()
 }

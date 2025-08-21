@@ -1,15 +1,15 @@
 package api
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"goauth/internal/storage"
 )
 
-var port = ":9888"
 var certFile = "cert.pem"
 var keyFile = "key.pem"
 
-func Serve() error {
+func Serve(port int) error {
 	r := gin.Default()
 	db, err := storage.Connect()
 
@@ -20,5 +20,5 @@ func Serve() error {
 	router := NewRouter(db)
 	router.RegisterRoutes(r)
 
-	return r.RunTLS(port, certFile, keyFile)
+	return r.RunTLS(fmt.Sprintf(":%d", port), certFile, keyFile)
 }

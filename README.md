@@ -4,6 +4,7 @@ A secure authentication service built with Go, featuring JWT tokens, refresh tok
 
 ## Features
 
+- Basic CLI
 - User registration and authentication
 - JWT token-based authentication
 - Refresh token mechanism (WIP)
@@ -15,6 +16,7 @@ A secure authentication service built with Go, featuring JWT tokens, refresh tok
 ## Tech Stack
 
 - **Go** - Backend language
+- **Cobra** - CLI framework
 - **Gin** - HTTP web framework
 - **GORM** - ORM for database operations
 - **SQLite** - Database
@@ -24,7 +26,13 @@ A secure authentication service built with Go, featuring JWT tokens, refresh tok
 ## Project Structure
 
 ```
+.
+├── bin
 ├── cert.pem
+├── cmd
+│   ├── root.go
+│   ├── serve.go
+│   └── version.go
 ├── goauth.db
 ├── go.mod
 ├── go.sum
@@ -46,6 +54,7 @@ A secure authentication service built with Go, featuring JWT tokens, refresh tok
 │   └── version
 │       └── version.go
 ├── key.pem
+├── LICENSE.md
 ├── main.go
 ├── Makefile
 └── README.md
@@ -71,9 +80,13 @@ make generate-cert
 ```make
 make generate-secret
 ```
-5. Run the application:
-```go
-go run .
+5. Build the application:
+```make 
+make build-[linux|macos]
+```
+6. Run the application:
+```bash 
+./bin/goauth-[linux|macos]
 ```
 
 ## Usage
