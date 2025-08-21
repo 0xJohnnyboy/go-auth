@@ -30,7 +30,13 @@ func RegisterHandler(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, gin.H{"user": user})
+	token, err := GenerateToken(user.ID, user.Username)
+	if err != nil {
+		c.JSON(500, gin.H{"error": "User created but token generation failed"})
+		return
+	}
+
+	c.JSON(200, gin.H{"user": user, "token": token})
 }
 
 type UserLoginInput struct {
@@ -49,7 +55,13 @@ func LoginHandler(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, gin.H{"user": user})
+	token, err := GenerateToken(user.ID, user.Username)
+	if err != nil {
+		c.JSON(500, gin.H{"error": "Token generation failed"})
+		return
+	}
+
+	c.JSON(200, gin.H{"token": token})
 }
 
 func LogoutHandler(c *gin.Context) {

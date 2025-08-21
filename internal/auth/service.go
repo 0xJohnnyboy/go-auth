@@ -53,7 +53,9 @@ func Login(username, password string) (*User, error) {
 
 	if !VerifyPassword(password, user.Password) {
 		return nil, errors.New("invalid password")
+
 	}
+
 	return &user, nil
 }
 
