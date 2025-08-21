@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-var secret = os.Getenv("JWT_SECRET")
+var secret = os.Getenv("APP_SECRET")
 
 func GenerateToken(userID uint, username string) (string, error) {
 	claims := jwt.MapClaims{
