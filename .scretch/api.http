@@ -1,0 +1,36 @@
+### register
+# @prompt username 
+# @secret password 
+POST {{API_URL}}/register HTTP/1.1
+Accept: application/json
+Content-Type: application/json
+
+{
+  "username": "{{username}}",
+  "password": "{{password}}"
+}
+
+### login
+POST {{API_URL}}/login HTTP/1.1
+accept: application/json
+content-type: application/json
+
+{
+  "username": "{{username}}",
+  "password": "{{password}}"
+}
+
+### test
+GET {{API_URL}}/api/test HTTP/1.1
+Cookie: {{login.response.headers.Set-Cookie}}
+accept: application/json
+
+### logout
+POST {{API_URL}}/api/logout HTTP/1.1
+Cookie: {{login.response.headers.Set-Cookie}}
+accept: application/json
+content-type: application/json
+
+### hc
+GET {{API_URL}}/hc HTTP/1.1
+accept: application/json
