@@ -6,6 +6,9 @@ LDFLAGS := -X 'goauth/internal/version.Version=$(VERSION)' \
 		   -X 'goauth/internal/version.Commit=$(COMMIT)' \
 		   -X 'goauth/internal/version.BuildTime=$(DATE)'
 
+generate-cert:
+	openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -nodes
+
 generate-secret:
 	echo "APP_SECRET=$$(openssl rand -hex 32)" > .env
 

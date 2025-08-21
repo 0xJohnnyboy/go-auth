@@ -43,7 +43,7 @@ func RegisterHandler(c *gin.Context) {
 		3600*24,
 		"/",
 		"",
-		false,
+		true,
 		true,
 	)
 
@@ -85,7 +85,7 @@ func LoginHandler(c *gin.Context) {
 		3600*24, // one day
 		"/",
 		"",
-		false,
+		true,
 		true,
 	)
 
@@ -99,5 +99,7 @@ func LoginHandler(c *gin.Context) {
 }
 
 func LogoutHandler(c *gin.Context) {
-	c.String(200, "Logged out")
+	c.GetString("username")
+	c.SetCookie("token", "", -1, "/", "", true, true)
+	c.JSON(200, gin.H{"message": "Logged out"})
 }

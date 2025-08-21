@@ -5,9 +5,11 @@ import (
 )
 
 var port = ":9888"
+var certFile = "cert.pem"
+var keyFile = "key.pem"
 
 func Serve() error {
 	r := gin.Default()
 	RegisterRoutes(r)
-	return r.Run(port)
+	return r.RunTLS(port, certFile, keyFile)
 }
