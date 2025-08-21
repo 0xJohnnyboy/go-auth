@@ -18,6 +18,7 @@ type UserRegisterInput struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
 }
+
 func RegisterHandler(c *gin.Context) {
 	var input UserRegisterInput
 	if err := c.ShouldBindJSON(&input); err != nil {
@@ -36,13 +37,30 @@ func RegisterHandler(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, gin.H{"user": user, "token": token})
+	c.SetCookie(
+		"token",
+		token,
+		3600*24,
+		"/",
+		"",
+		false,
+		true,
+	)
+
+	c.JSON(200, gin.H{
+		"message": "Register successful",
+		"user": gin.H{
+			"id":       user.ID,
+			"username": user.Username,
+		},
+	})
 }
 
 type UserLoginInput struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
 }
+
 func LoginHandler(c *gin.Context) {
 	var input UserLoginInput
 	if err := c.ShouldBindJSON(&input); err != nil {
@@ -61,7 +79,23 @@ func LoginHandler(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, gin.H{"token": token})
+	c.SetCookie(
+		"token",
+		token,
+		3600*24, // one day
+		"/",
+		"",
+		false,
+		true,
+	)
+
+	c.JSON(200, gin.H{
+		"message": "Login successful",
+		"user": gin.H{
+			"id":       user.ID,
+			"username": user.Username,
+		},
+	})
 }
 
 func LogoutHandler(c *gin.Context) {
