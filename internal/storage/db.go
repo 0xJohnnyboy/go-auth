@@ -15,6 +15,6 @@ func Connect() (*gorm.DB, error) {
 		return nil, err
 	}
 
-	err = db.AutoMigrate(&User{})
+	err = db.AutoMigrate(&User{}, &RefreshToken{})
 	return db, nil
 }
