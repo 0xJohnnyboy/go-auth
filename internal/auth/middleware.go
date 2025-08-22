@@ -10,6 +10,13 @@ import (
 
 var secret = os.Getenv("APP_SECRET")
 
+type AuthMiddleware struct {
+}
+
+func NewAuthMiddleware() *AuthMiddleware {
+	return &AuthMiddleware{}
+}
+
 func GenerateToken(userID uint, username string) (string, error) {
 	claims := jwt.MapClaims{
 		"user_id":  userID,
@@ -41,7 +48,7 @@ func ValidateToken(tokenString string) (jwt.MapClaims, error) {
 	return nil, jwt.ErrTokenInvalidClaims
 }
 
-func RequireAuth() gin.HandlerFunc {
+func (am *AuthMiddleware) RequireAuth() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		token, err := c.Cookie("token")
 

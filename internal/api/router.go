@@ -7,12 +7,14 @@ import (
 )
 type Router struct {
 	h *Handlers
+	am *AuthMiddleware
 }
 
 
 func NewRouter(db *gorm.DB) *Router {
 	return &Router{
 		h: NewHandlers(db),
+		am: NewAuthMiddleware(),
 	}
 }
 
@@ -27,7 +29,7 @@ func (r *Router) RegisterRoutes(router *gin.Engine) {
 
 	{
 		api := router.Group("/api")
-		api.Use(RequireAuth())
+		api.Use(r.am.RequireAuth())
 
 		api.GET("/test", r.h.TestHandler)
 		api.POST("/logout", r.h.LogoutHandler)
